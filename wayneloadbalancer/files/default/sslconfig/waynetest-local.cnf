@@ -1,0 +1,32 @@
+[ req ]
+prompt = no
+serial = 1
+default_bits = 4096
+distinguished_name = req_distinguished_name
+req_extensions	= req_ext
+
+#distinguished_name
+[ req_distinguished_name ]
+countryName            = "WI"                     	# C=
+stateOrProvinceName    = "Wisconsin"                 	# ST=
+localityName           = "Menomonie"                 	# L=
+postalCode             = "54751"                 	# L/postalcode=
+streetAddress          = "712 Broadway St S"            # L/street=
+organizationName       = "UW-Stout"        		# O=
+organizationalUnitName = "CNIT Capstone"          	# OU=
+commonName             = "waynetest.local"            	# CN=
+emailAddress           = "franklinc7416@my.uwstout.edu" # CN/emailAddress=
+
+# req_extentions
+[ req_ext ]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1	= cheflb.waynetest.local
+DNS.2	= centchefclient.waynetest.local
+DNS.3	= chefclient2.waynetest.local
+DNS.4	= www.waynetest.local
+IP.1	= 192.168.30.65
+IP.2	= 192.168.30.62
+IP.3	= 192.168.30.63
+

@@ -1,0 +1,28 @@
+[ req ]
+prompt = no
+serial = 1
+default_bits = 4096
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+
+#distinguished_name
+[ req_distinguished_name ]
+countryName            = "WI"                     	# C=
+stateOrProvinceName    = "Wisconsin"                 	# ST=
+localityName           = "Menomonie"                 	# L=
+postalCode             = "54751"                 	# L/postalcode=
+streetAddress          = "712 Broadway St S"            # L/street=
+organizationName       = "UW-Stout"        		# O=
+organizationalUnitName = "CNIT Capstone"          	# OU=
+commonName             = "waynetest.local"            	# CN=
+emailAddress           = "franklinc7416@my.uwstout.edu" # CN/emailAddress=
+
+# req_extentions
+[ v3_req ]
+
+subjectKeyIdentifier 	= hash
+autorityKeyIdentifier 	= keyid:always, issuer:always
+basicConstraints 	= CA:TRUE
+keyUsage               	= digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign
+subjectAltName 		= DNS:cheflb.waynetest.local, DNS:centchefclient.waynetest.local, DNS:chefclient2.waynetest.local, DNS:waynetest.local, DNS:192.168.30.65,DNS:192.168.30.62, DNS:192.168.30.63
+issuerAltName		=issuer:copy

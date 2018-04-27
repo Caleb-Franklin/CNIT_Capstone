@@ -1,0 +1,90 @@
+#
+# Cookbook:: wayneloadbalancer
+# Recipe:: default
+#
+# Copyright:: 2018, The Authors, All Rights Reserved.
+
+# -- setup HAProxy
+
+bash 'haproxy install' do
+   user 'root'
+   group 'root'
+   code <<-EOC
+	yum install -y haproxy
+   EOC
+   not_if "yum list installed | grep haproxy"
+end
+
+# -- Configure SSL
+
+directory '/etc/ssl/private' do
+  owner 'root'
+  group 'root'
+  mode 0644
+  action :create
+end
+
+cookbook_file '/etc/ssl/private/waynetest-local.config' do
+  source "sslconfig/waynetest-local.conf"
+  owner "root"
+  group "root"
+  mode 0774
+  action :create
+end
+
+bash 'SSL configuration and setup' do
+    user 'root'
+    group 'root'
+    code <<-EOC
+       cd /etc/ssl/private
+       openssl req -config waynetest-local.conf -new -x509 -sha256 -newkey rsa:2048 -nodes \ 
+		-keyout waynetest-local.key.pem -days 365 -out waynetest-local.cert.pem
+       openssl req -config waynetest-local.conf -new -sha256 -newkey rsa:2048 -nodes \
+		-keyout waynetest-local.key.pem -days 365 -out waynetest-local.req.pem
+       openssl x509 -in waynetest-local.cert.pem -text -noout
+       openssl req -in waynetest-local.req.pem -text -noout
+    EOC
+end
+
+#bash 'SSL configuration' do
+#   user 'root'
+#   group 'root'
+#   code <<-EOC
+#	mkdir /etc/ssl/private
+#	cd /etc/ssl/private
+#	openssl genrsa -des3 -passout pass:xxxx -out server.pass.key 2048
+#	openssl rsa -passin pass:x -in server.pass.key -out waynetest.local.key
+#	rm server.pass.key
+#	openssl req -new -key waynetest.local.key -out waynetest.local.csr \
+#	  -subj "/C=US/ST=Wisconsin/L=Menomenie/O=Capstone/OU=Capstone/CN=waynetest.local"
+#	openssl x509 -req -days 365 -in waynetest.local.csr -signkey waynetest.local.key -out waynetest.local.crt
+#	cat waynetest.local.crt waynetest.local.key > waynetest.local.pem
+ #  EOC
+#	not_if 'ls /etc/ssl/private | grep waynetest.local.pem'
+#end
+# -- Modify Config HAProxy
+
+cookbook_file '/etc/haproxy/haproxy.cfg' do
+  source "haproxy/haproxy.cfg"
+  owner "root"
+  group "root"
+  mode 0774
+  action :create
+end
+
+# -- disable selinux
+
+bash 'Disable selinux' do
+   user 'root'
+   group 'root'
+   code <<-EOC
+     setenforce 0
+   EOC
+
+end
+
+# -- restart HAproxy
+
+service 'haproxy' do
+  action :restart
+end
