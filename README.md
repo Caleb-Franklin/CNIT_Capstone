@@ -1,2 +1,2 @@
-# chef-repo
-# Using Chef to Automate VM's and deploy website.
+# Chef Cookbooks
+# Using Chef to Automate Wayne Enterprises Webapp, Load Balancer, and MariaDB Database.
