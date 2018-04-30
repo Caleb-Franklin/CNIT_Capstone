@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Wayne Enterprises</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- This allows us to collapse other stuff below -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#most-menu-items" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="/polls">
+                    Wayne Enterprises
+                </a>
+            </div>
+
+            <div class="navbar-collapse collapse" id="most-menu-items">
+
+                <!-- Create our main nav bar list -->
+                <ul class="nav navbar-nav navbar-right">
+                <!-- Dropdown for networktools -->
+                <!-- this creates the li for the dropdown link -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services<span class="caret"></span></a>
+                    <!-- This created ul for menu items -->
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header" style="font-size:14px; color:#c8102e;">Polls</li>
+                        <li><a target="_self" href="/polls">Poll List</a></li>
+                        <li class="divider" role="separator"></li>
+                        <li class="dropdown-header" style="font-size:14px; color:#c8102e;">Contact</li>
+                        <li><a target="_self" href="/static/about_us">About Us</a></li>
+                    </ul>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <div id="wrap">
+            <div id="main" class="container clear-top">
+                <div class='container-fluid'>
+                    <div class='col-md-8'>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <h1>
+                                    {{ question.question_text }}
+                                </h1>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-8'>
+                        <div class='row margin-row'>
+                            <div class='col-md-12'>
+                                <h4></h4>
+                                <table class='table table-hover table-responsive'>
+                                    <tbody>
+                                        {% for choice in question.choice_set.all %}
+                                            <tr>
+                                                <th>{{ choice.choice_text }}</th>
+                                                <td>{{ choice.votes }} vote{{ choice.votes|pluralize }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <br>
+                                <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
